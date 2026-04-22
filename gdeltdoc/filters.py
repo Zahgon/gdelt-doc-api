@@ -248,7 +248,7 @@ class Filters:
 
     @property
     def query_string(self) -> str:
-        return "".join(self.query_params)
+        pass
 
     @staticmethod
     def _filter_to_string(name: str, f: Filter) -> str:
@@ -268,12 +268,7 @@ class Filters:
         str
             The converted filter. Eg. "domain:cnn.com"
         """
-        if type(f) == str:
-            return f"{name}:{f} "
-
-        else:
-            # Build an OR statement
-            return "(" + " OR ".join([f"{name}:{clause}" for clause in f]) + ") "
+        pass
 
     @staticmethod
     def _keyword_to_string(keywords: Filter) -> str:
@@ -293,17 +288,7 @@ class Filters:
         str
             The converted filter eg. "(airline OR shipping)"
         """
-        if type(keywords) == str:
-            return f'"{keywords}" '
-
-        else:
-            return (
-                "("
-                + " OR ".join(
-                    [f'"{word}"' if " " in word else word for word in keywords]
-                )
-                + ") "
-            )
+        pass
 
     @staticmethod
     def _tone_to_string(name: str, tone: Filter) -> str:
@@ -324,11 +309,7 @@ class Filters:
         str
             The converted filter eg. "tone>5"
         """
-        if type(tone) == str:
-            return f"{name}{tone} "
-
-        else:
-            raise NotImplementedError("Multiple tone values are not supported yet.")
+        pass
 
     @staticmethod
     def _validate_timespan(timespan: str) -> None:
@@ -351,21 +332,4 @@ class Filters:
         -------
         None
         """
-
-        value = timespan.rstrip(ascii_lowercase)
-        unit = timespan[len(value) :]
-
-        if unit not in VALID_TIMESPAN_UNITS:
-            raise ValueError(
-                f"Timespan {timespan} is invalid. {unit} is not a supported unit, must be one of {' '.join(VALID_TIMESPAN_UNITS)}"
-            )
-
-        if not all(d in digits for d in value):
-            raise ValueError(
-                f"Timespan {timespan} is invalid. {value} could not be converted into an integer"
-            )
-
-        if unit == "min" and int(value) < 60:
-            raise ValueError(
-                f"Timespan {timespan} is invalid. Period must be at least 60 minutes"
-            )
+        pass

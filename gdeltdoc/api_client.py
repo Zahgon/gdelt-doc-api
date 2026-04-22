@@ -77,11 +77,7 @@ class GdeltDoc:
         pd.DataFrame
             A pandas DataFrame of the articles returned from the API.
         """
-        articles = self._query("artlist", filters.query_string)
-        if "articles" in articles:
-            return pd.DataFrame(articles["articles"])
-        else:
-            return pd.DataFrame()
+        pass
 
     def timeline_search(self, mode: str, filters: Filters) -> pd.DataFrame:
         """
@@ -104,28 +100,7 @@ class GdeltDoc:
         pd.DataFrame
             A pandas DataFrame of the articles returned from the API.
         """
-        timeline = self._query(mode, filters.query_string)
-
-        # If no results
-        if (timeline == {}) or (len(timeline["timeline"]) == 0):
-            return pd.DataFrame()
-
-        results = {
-            "datetime": [entry["date"] for entry in timeline["timeline"][0]["data"]]
-        }
-
-        for series in timeline["timeline"]:
-            results[series["series"]] = [entry["value"] for entry in series["data"]]
-
-        if mode == "timelinevolraw":
-            results["All Articles"] = [
-                entry["norm"] for entry in timeline["timeline"][0]["data"]
-            ]
-
-        formatted = pd.DataFrame(results)
-        formatted["datetime"] = pd.to_datetime(formatted["datetime"])
-
-        return formatted
+        pass
 
     def _query(self, mode: str, query_string: str) -> Dict:
         """
@@ -145,34 +120,4 @@ class GdeltDoc:
         Dict
             The parsed JSON response from the API.
         """
-        if mode not in [
-            "artlist",
-            "timelinevol",
-            "timelinevolraw",
-            "timelinetone",
-            "timelinelang",
-            "timelinesourcecountry",
-        ]:
-            raise ValueError(f"Mode {mode} not in supported API modes")
-
-        headers = {
-            "User-Agent": f"GDELT DOC Python API client {version} - https://github.com/alex9smith/gdelt-doc-api"
-        }
-
-        response = requests.get(
-            f"https://api.gdeltproject.org/api/v2/doc/doc?query={query_string}&mode={mode}&format=json",
-            headers=headers,
-        )
-
-        raise_response_error(response=response)
-
-        # Sometimes the API responds to an invalid request with a 200 status code
-        # and a text/html content type. I can't figure out a pattern for when that happens so
-        # this raises a ValueError with the response content instead of one of the library's
-        # custom error types.
-        if "text/html" in response.headers["content-type"]:
-            raise ValueError(
-                f"The query was not valid. The API error message was: {response.text.strip()}"
-            )
-
-        return load_json(response.content, self.max_depth_json_parsing)
+        pass
